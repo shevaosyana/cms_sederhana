@@ -1,83 +1,37 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-
-// Load environment variables
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-$dotenv->load();
-
-// Start session
 session_start();
+require_once 'config/database.php';
+require_once 'includes/functions.php';
 
-// Initialize Auth Controller
-$auth = new App\Controllers\AuthController();
-
-// Basic routing
-$request = $_SERVER['REQUEST_URI'];
-$basePath = '/cms_sederhana';
-
-// Remove base path from request
-$request = str_replace($basePath, '', $request);
-
-// Check if user is logged in
-$isLoggedIn = $auth->checkAuth();
-
-// Public routes (no authentication required)
-$publicRoutes = ['/login'];
-
-// Redirect to login if not authenticated
-if (!$isLoggedIn && !in_array($request, $publicRoutes)) {
-    header('Location: /login');
-    exit;
+// Cek apakah user sudah login
+if (!isset($_SESSION['user_id']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
+    header("Location: login.php");
+    exit();
 }
 
-// Redirect to dashboard if already logged in and trying to access login page
-if ($isLoggedIn && $request === '/login') {
-    header('Location: /');
-    exit;
-}
+// Include header
+include 'includes/header.php';
 
-// Simple router
-switch ($request) {
-    case '':
-    case '/':
-        require __DIR__ . '/app/views/dashboard.php';
+// Routing sederhana
+$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+
+switch ($page) {
+    case 'dashboard':
+        include 'pages/dashboard.php';
         break;
-
-    case '/login':
-        $auth->login();
+    case 'posts':
+        include 'pages/posts.php';
         break;
-
-    case '/logout':
-        $auth->logout();
+    case 'categories':
+        include 'pages/categories.php';
         break;
-
-    case '/posts':
-        $postController = new App\Controllers\PostController();
-        $postController->index();
+    case 'users':
+        include 'pages/users.php';
         break;
-
-    case '/posts/create':
-        $postController = new App\Controllers\PostController();
-        $postController->create();
-        break;
-
-    case (preg_match('/^\/posts\/edit\/(\d+)$/', $request, $matches) ? true : false):
-        $postController = new App\Controllers\PostController();
-        $postController->edit($matches[1]);
-        break;
-
-    case (preg_match('/^\/posts\/delete\/(\d+)$/', $request, $matches) ? true : false):
-        $postController = new App\Controllers\PostController();
-        $postController->delete($matches[1]);
-        break;
-
-    case '/users':
-        $userController = new App\Controllers\UserController();
-        $userController->index();
-        break;
-
     default:
-        http_response_code(404);
-        require __DIR__ . '/app/views/404.php';
-        break;
-} 
+        include 'pages/dashboard.php';
+}
+
+// Include footer
+include 'includes/footer.php';
+?> 
