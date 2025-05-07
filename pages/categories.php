@@ -1,4 +1,6 @@
 <?php
+require_once 'includes/header.php';
+
 // Proses hapus kategori
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM categories WHERE id = ?");
@@ -38,8 +40,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Ambil semua kategori
-$categories = getAllCategories($pdo);
+$stmt = $pdo->query("SELECT * FROM categories");
+$categories = $stmt->fetchAll();
+
+// Cek jika ada filter kategori
+$selected_category = isset($_GET['category_id']) ? (int)$_GET['category_id'] : 0;
+
+// Jika kategori dipilih, ambil post dari kategori itu
+$posts = [];
+if ($selected_category) {
+    $stmt = $pdo->prepare("SELECT * FROM posts WHERE category_id = ?");
+    $stmt->execute([$selected_category]);
+    $posts = $stmt->fetchAll();
+}
 ?>
+
+<div class="container-fluid py-4">
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Pilih Kategori</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-auto">
+                    <select name="category_id" class="form-select" onchange="this.form.submit()">
+                        <option value="0">-- Semua Kategori --</option>
+                        <?php foreach ($categories as $cat): ?>
+                            <option value="<?= $cat['id'] ?>" <?= $selected_category == $cat['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($cat['name']) ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <?php if ($selected_category && $posts): ?>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Post pada Kategori: <?= htmlspecialchars($categories[array_search($selected_category, array_column($categories, 'id'))]['name']) ?></h5>
+            </div>
+            <div class="card-body">
+                <ul>
+                    <?php foreach ($posts as $post): ?>
+                        <li><?= htmlspecialchars($post['title']) ?></li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
 
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Daftar Kategori</h2>
@@ -126,4 +177,6 @@ if (isset($_GET['action']) && ($_GET['action'] === 'create' || $_GET['action'] =
     </div>
 </div>
 <div class="modal-backdrop fade show"></div>
-<?php endif; ?> 
+<?php endif; ?>
+
+<?php require_once 'includes/footer.php'; ?> 

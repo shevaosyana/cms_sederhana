@@ -228,4 +228,90 @@ body {
     background-color: #fff;
     text-align: center;
     box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+}
+
+/* Dark mode styles */
+body.dark-mode {
+    background-color: #181a1b !important;
+    color: #e0e0e0;
+}
+body.dark-mode .navbar {
+    background: linear-gradient(135deg, #232526 0%, #414345 100%) !important;
+    color: #e0e0e0;
+}
+body.dark-mode .navbar .navbar-brand,
+body.dark-mode .navbar .nav-link,
+body.dark-mode .navbar .dropdown-toggle {
+    color: #e0e0e0 !important;
+}
+body.dark-mode .navbar .nav-link.active {
+    color: #ffd700 !important;
+}
+body.dark-mode .card,
+body.dark-mode .modal-content {
+    background: #232526 !important;
+    color: #e0e0e0;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+body.dark-mode .card-header,
+body.dark-mode .modal-header {
+    background: #232526 !important;
+    border-bottom: 1px solid #333 !important;
+}
+body.dark-mode .table {
+    color: #e0e0e0;
+}
+body.dark-mode .table th {
+    background: #232526 !important;
+    color: #ffd700 !important;
+}
+body.dark-mode .table td {
+    background: #232526 !important;
+    color: #e0e0e0;
+}
+body.dark-mode .form-control {
+    background: #232526;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+body.dark-mode .form-label {
+    color: #ffd700;
+}
+body.dark-mode .btn,
+body.dark-mode .btn-primary,
+body.dark-mode .btn-light,
+body.dark-mode .btn-outline-light {
+    background: #232526;
+    color: #ffd700;
+    border: 1px solid #ffd700;
+}
+body.dark-mode .btn:hover,
+body.dark-mode .btn-primary:hover,
+body.dark-mode .btn-light:hover,
+body.dark-mode .btn-outline-light:hover {
+    background: #ffd700;
+    color: #232526;
+    border: 1px solid #ffd700;
+}
+body.dark-mode .alert {
+    background: #232526;
+    color: #ffd700;
+    border: 1px solid #ffd700;
+}
+body.dark-mode .dropdown-menu {
+    background: #232526;
+    color: #e0e0e0;
+    border: 1px solid #444;
+}
+body.dark-mode .dropdown-item {
+    color: #e0e0e0;
+}
+body.dark-mode .dropdown-item:hover {
+    background: #333;
+    color: #ffd700;
+}
+body.dark-mode .footer {
+    background: #232526;
+    color: #e0e0e0;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.4);
 } 

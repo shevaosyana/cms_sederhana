@@ -1,8 +1,16 @@
 <?php
 require_once 'includes/header.php';
 
-// Ambil data user dari database
-$stmt = $pdo->query("SELECT id, username, email FROM users");
+// Ambil data user beserta total post dan total comments
+$stmt = $pdo->query("
+    SELECT 
+        u.id, 
+        u.username, 
+        u.email,
+        (SELECT COUNT(*) FROM posts p WHERE p.user_id = u.id) AS total_posts,
+        (SELECT COUNT(*) FROM comments c WHERE c.user_id = u.id) AS total_comments
+    FROM users u
+");
 $users = $stmt->fetchAll();
 ?>
 
@@ -19,6 +27,8 @@ $users = $stmt->fetchAll();
                             <th>No</th>
                             <th>Username</th>
                             <th>Email</th>
+                            <th>Total Post</th>
+                            <th>Total Comments</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,6 +37,8 @@ $users = $stmt->fetchAll();
                             <td><?= $i+1 ?></td>
                             <td><?= htmlspecialchars($user['username']) ?></td>
                             <td><?= htmlspecialchars($user['email']) ?></td>
+                            <td><?= $user['total_posts'] ?></td>
+                            <td><?= $user['total_comments'] ?></td>
                         </tr>
                         <?php endforeach ?>
                     </tbody>

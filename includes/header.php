@@ -44,6 +44,11 @@
                     <?php endif; ?>
                 </ul>
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item me-2 d-flex align-items-center">
+                        <button id="darkModeToggle" class="btn btn-outline-light btn-sm" title="Toggle dark mode">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                             <i class="fas fa-user-circle me-1"></i> <?php echo $_SESSION['username']; ?>
@@ -73,3 +78,29 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         <?php endif; ?> 
+
+<script>
+// Dark mode toggle
+if (typeof window !== 'undefined') {
+    const toggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+    // Aktifkan dark mode secara default jika belum ada preferensi
+    if (
+        localStorage.getItem('darkMode') === 'enabled' ||
+        localStorage.getItem('darkMode') === null
+    ) {
+        body.classList.add('dark-mode');
+        localStorage.setItem('darkMode', 'enabled');
+    }
+    if (toggle) {
+        toggle.addEventListener('click', function() {
+            body.classList.toggle('dark-mode');
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+            }
+        });
+    }
+}
+</script> 
