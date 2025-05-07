@@ -1,6 +1,4 @@
 <?php
-require_once 'includes/header.php';
-
 // Proses hapus kategori
 if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
     $stmt = $pdo->prepare("DELETE FROM categories WHERE id = ?");
@@ -38,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: index.php?page=categories");
     exit();
 }
+
+require_once 'includes/header.php';
 
 // Ambil semua kategori
 $stmt = $pdo->query("SELECT * FROM categories");
